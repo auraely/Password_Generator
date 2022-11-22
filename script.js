@@ -88,27 +88,40 @@ var specialCharacters = [
     'Z'
   ];
   
-  var optionsArray= [];
-  var lower = false;
-  var special = false;
-  var upper = false;
-  var nums = false;
+var optionsArray=[]
+var passLength=null;
   
-  
-  
-  function reset(){
+function reset()  {
   lower = false;
   special = false;
   upper = false;
   nums = false;
-  passLength=null;
+  passLength = null;
   optionsArray= [];
+}
+
+function getPasswordOptions()  {
+  passLength = parseInt(prompt("How many characters would you like your password to have?"));
+  if(passLength < 10 || passLength > 64)   {
+      alert("Password must be between 10 and 64 characters. Please try again!")
+      return false;
+    } 
+    else if (passLength === null || !passLength) {
+      alert("You must enter a numeric value!")
+      return false;
+    }
+      else {
+      lower = confirm("Click OK to include lowercase characters");
+      special = confirm("Click OK to include special characters");
+      upper = confirm("Click OK to include uppercase characters");
+      nums = confirm("Click Ok to include numbers");
+      return true;
+      }
+    
   }
-  
-  
   // Function to prompt user for password options
   
-  function getPasswordOptions() {
+  function getArray() {
     
     if (!lower && !special && !upper && !nums)  {
       alert("You must choose minimum one criteria!")
@@ -126,30 +139,27 @@ var specialCharacters = [
   
      if (nums)
      optionsArray=optionsArray.concat(numericCharacters)
+
+     return optionsArray
   }
     
-  
-  
   // Function for getting a random element from an array
   function getRandom() {
-    //getPasswordOptions()
+    //from optionArray we'll generate a  random number
     for (var i=0; i<optionsArray.length; i++) {
-     var randomChar = optionsArray[Math.floor(Math.random() * optionsArray.length)] // we get a random 
-     
-    return randomChar
+     var randomChar = optionsArray[Math.floor(Math.random() * optionsArray.length)] // 
+     return randomChar
     } 
   }
   
   // Function to generate password with user input
   function generatePassword() {
     var finalpassword = "";
-    getPasswordOptions();  //we call the funcion to get the array
-    //we can use loops to run 50 times
-    for (var i=1; i <= passLength; i++)  {    // we run this for how many characters the password is
-     finalpassword += getRandom();      //we call the function to get the random character
+    getArray();  //we call the function to get the array from where we'll get the random number returned at getRandom()
+    for (var i=1; i <= passLength; i++)  {    // we run as many times as the password length
+     finalpassword += getRandom();      
     }  
-    
-    //console.log(finalpassword)
+    //console.log(finalpassword)  
     return finalpassword
   }
 
@@ -158,28 +168,14 @@ var specialCharacters = [
 // Write password to the #password input   // 
 function writePassword() {
   reset();
-  passLength = parseInt(prompt("How many characters would you like your password to have?"));
-if(passLength < 10 || passLength > 64)   {
-    alert("Password must be between 10 and 64 characters. Please try again!")
-    return;
-  } 
-  else if (passLength === null || !passLength) {
-    alert("You must enter a numeric value!")
-    return;
-  }
-    else {
-    lower = confirm("Click OK to include lowercase characters");
-    special = confirm("Click OK to include special characters");
-    upper = confirm("Click OK to include uppercase characters");
-    nums = confirm("Click Ok to include numbers");
-    }
+  if (!getPasswordOptions())
+  return
+
   var password = generatePassword();
   var passwordText = document.querySelector('#password');
-  
   passwordText.value = password;    
   
 }
-
 // Add event listener to generate button
 generateBtn.addEventListener('click', writePassword);  
 
