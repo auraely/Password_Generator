@@ -89,7 +89,11 @@ var specialCharacters = [
   ];
   
 var optionsArray=[]
-var passLength=null;
+var passLength = null;
+var lower = false;
+var special = false;
+var upper = false;
+var nums = false;
   
 function reset()  {
   lower = false;
@@ -98,7 +102,7 @@ function reset()  {
   nums = false;
   passLength = null;
   optionsArray= [];
-}
+} 
 
 function getPasswordOptions()  {
   passLength = parseInt(prompt("How many characters would you like your password to have?"));
@@ -125,37 +129,38 @@ function getPasswordOptions()  {
     
     if (!lower && !special && !upper && !nums)  {
       alert("You must choose minimum one criteria!")
-      return;    
+    return
     }
     // combinations of arrays based on User options
-     if (lower)
+    if (lower)
      optionsArray=optionsArray.concat(lowerCasedCharacters)
     
-     if (special)
+    if (special)
      optionsArray=optionsArray.concat(specialCharacters)
   
-     if (upper)
+    if (upper)
      optionsArray=optionsArray.concat(upperCasedCharacters)
   
-     if (nums)
+    if (nums)
      optionsArray=optionsArray.concat(numericCharacters)
 
-     return optionsArray
+    return optionsArray
   }
     
   // Function for getting a random element from an array
   function getRandom() {
     //from optionArray we'll generate a  random number
-    for (var i=0; i<optionsArray.length; i++) {
-     var randomChar = optionsArray[Math.floor(Math.random() * optionsArray.length)] // 
-     return randomChar
-    } 
+    var randomChar='' 
+    if (optionsArray.length>0)
+     randomChar = optionsArray[Math.floor(Math.random() * optionsArray.length)] // 
+    return randomChar
+    
   }
   
   // Function to generate password with user input
   function generatePassword() {
     var finalpassword = "";
-    getArray();  //we call the function to get the array from where we'll get the random number returned at getRandom()
+    getArray();  //call the function to get the array from where we'll get the random number returned at getRandom()
     for (var i=1; i <= passLength; i++)  {    // we run as many times as the password length
      finalpassword += getRandom();      
     }  
@@ -167,8 +172,8 @@ function getPasswordOptions()  {
 
 // Write password to the #password input   // 
 function writePassword() {
-  reset();
-  if (!getPasswordOptions())
+  reset();   // reset everytime 
+  if(!getPasswordOptions())    //call the function
   return
 
   var password = generatePassword();
